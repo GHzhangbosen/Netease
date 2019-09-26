@@ -1,4 +1,4 @@
-package coder.zhang.plugin_package;
+package coder.zhang.plugin_package.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

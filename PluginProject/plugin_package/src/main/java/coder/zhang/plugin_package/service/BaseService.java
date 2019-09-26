@@ -1,4 +1,4 @@
-package coder.zhang.plugin_package;
+package coder.zhang.plugin_package.service;
 
 import android.app.Service;
 import android.content.Intent;

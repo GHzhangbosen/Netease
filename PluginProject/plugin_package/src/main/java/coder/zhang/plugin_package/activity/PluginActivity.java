@@ -1,17 +1,19 @@
-package coder.zhang.plugin_package;
+package coder.zhang.plugin_package.activity;
 
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import coder.zhang.plugin_package.receiver.TestBroadcastReceiver;
+import coder.zhang.plugin_package.service.TestService;
 
 public class PluginActivity extends BaseActivity {
 

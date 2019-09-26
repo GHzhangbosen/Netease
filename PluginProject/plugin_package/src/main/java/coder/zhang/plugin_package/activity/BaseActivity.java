@@ -1,4 +1,4 @@
-package coder.zhang.plugin_package;
+package coder.zhang.plugin_package.activity;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
