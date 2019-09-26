@@ -35,8 +35,7 @@ public class ProxyActivity extends AppCompatActivity {
 
         try {
             Class<?> mPluginActivityClass = PluginManager.getInstance(this).getClassLoader().loadClass(className);
-            Constructor<?> constructor = mPluginActivityClass.getConstructor();
-            Object mPluginActivity = constructor.newInstance();
+            Object mPluginActivity = mPluginActivityClass.newInstance();
             ActivityInterface activityInterface = (ActivityInterface) mPluginActivity;
             activityInterface.insertAppContext(this);
 
