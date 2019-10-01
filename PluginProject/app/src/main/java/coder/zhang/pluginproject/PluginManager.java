@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -83,7 +84,6 @@ public class PluginManager {
     }
 
     public void parserApkAction() {
-
         try {
             // 1、获取AndroidManifest.xml对应的类： public Package parsePackage(File packageFile, int flags)
             Class<?> mPackageParserClass = Class.forName("android.content.pm.PackageParser");
@@ -118,8 +118,6 @@ public class PluginManager {
                     context.registerReceiver(mStaticReceiver, intentFilter);
                 }
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }

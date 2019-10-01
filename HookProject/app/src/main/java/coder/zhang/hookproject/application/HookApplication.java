@@ -35,12 +35,14 @@ public class HookApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-//        hookAMSAtion();
-//
-//        hookLaunchActivity();
+        // 如果本项目的TestActivity没有在AndroidManifest.xml里注册，那么如何既不让其报错，又能执行跳转？
+        hookAMSAtion();
+        hookLaunchActivity();
 
+        // 将宿主和插件的dexElements合并成一个全新的dexElementsNew，然后用宿主的LoadedApk(里面有一个mClassLoader的成员变量)去加载dexElementsNew
 //        pluginToAppAction();
 
+        // 定义一个单独的LoadedApk，专门用来加载插件。这样的话，加载宿主和加载插件的LoadedApk就可以区分开来了
         customLoadedApkAction();
     }
 
