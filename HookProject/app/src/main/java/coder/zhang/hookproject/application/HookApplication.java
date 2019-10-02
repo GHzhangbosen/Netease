@@ -3,7 +3,9 @@ package coder.zhang.hookproject.application;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
@@ -37,7 +39,7 @@ public class HookApplication extends Application {
 
         // 如果本项目的TestActivity没有在AndroidManifest.xml里注册，那么如何既不让其报错，又能执行跳转？
         hookAMSAtion();
-        hookLaunchActivity();
+//        hookLaunchActivity();
 
         // 将宿主和插件的dexElements合并成一个全新的dexElementsNew，然后用宿主的LoadedApk(里面有一个mClassLoader的成员变量)去加载dexElementsNew
 //        pluginToAppAction();
@@ -106,8 +108,8 @@ public class HookApplication extends Application {
             e.printStackTrace();
         }
     }
-//
-//    public static final int RELAUNCH_ACTIVITY = 160;
+
+    public static final int RELAUNCH_ACTIVITY = 160;
 
     private class MyCallback implements Handler.Callback {
 
@@ -120,8 +122,8 @@ public class HookApplication extends Application {
         @Override
         public boolean handleMessage(@NonNull Message msg) {
             Log.d("succ2", "handleMessage: " + msg.what);
-//            switch (msg.what) {
-//                case RELAUNCH_ACTIVITY:
+            switch (msg.what) {
+                case RELAUNCH_ACTIVITY:
                     try {
 
                         Object obj = msg.obj; // ActivityClientRecord类型
@@ -129,16 +131,32 @@ public class HookApplication extends Application {
                         Field mIntentField = obj.getClass().getDeclaredField("intent");
                         mIntentField.setAccessible(true);
                         Intent intent = (Intent) mIntentField.get(obj);
-                        Parcelable actionIntent = intent.getParcelableExtra("actionIntent");
+                        Intent actionIntent = intent.getParcelableExtra("actionIntent");
                         if (actionIntent == null) return false;
 
                         mIntentField.set(obj, actionIntent);
 
+                        // 解决问题：PackageManager会自动检测intent对应的包名是否安装，如果未安装，则报错
+                        Class<?> mActivityClientRecordClass = Class.forName("android.app.ActivityThread$ActivityClientRecord");
+                        Field mActivityInfoField = mActivityClientRecordClass.getDeclaredField("activityInfo");
+                        mActivityInfoField.setAccessible(true);
+                        ActivityInfo activityInfo = (ActivityInfo) mActivityInfoField.get(obj);
+
+                        if (actionIntent.getPackage() == null) {
+                            // 当前即将加载的是插件
+                            activityInfo.applicationInfo.packageName = actionIntent.getComponent().getPackageName();
+
+                            // Hook getPackageInfo()方法
+                            hookGetPackageInfoAction();
+                        } else {
+                            activityInfo.applicationInfo.packageName = actionIntent.getPackage();
+                        }
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-//                    break;
-//            }
+                    break;
+            }
             mH.handleMessage(msg);
             return true;
         }
@@ -289,5 +307,33 @@ public class HookApplication extends Application {
         applicationInfo.sourceDir = pluginPath;
         applicationInfo.publicSourceDir = pluginPath;
         return applicationInfo;
+    }
+
+    private void hookGetPackageInfoAction() {
+        try {
+            // 1、拿到ActivityThread里的sPackageManager字段
+            Class<?> mActivityThreadClass = Class.forName("android.app.ActivityThread");
+            Field mPackageManagerField = mActivityThreadClass.getDeclaredField("sPackageManager");
+            mPackageManagerField.setAccessible(true);
+
+            Method mCurrentActivityThreadMethod = mActivityThreadClass.getMethod("currentActivityThread");
+            Object mActivityThread = mCurrentActivityThreadMethod.invoke(null);
+            final Object mPackageManagerObj = mPackageManagerField.get(null);
+
+            // 2、替换sPackageManager
+            Class<?> mPackageManagerClass = Class.forName("android.content.pm.IPackageManager");
+            Object mPackageManagerProxy = Proxy.newProxyInstance(getClassLoader(), new Class[]{mPackageManagerClass}, new InvocationHandler() {
+                @Override
+                public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                    if ("getPackageInfo".equals(method.getName())) {
+                        return new PackageInfo();
+                    }
+                    return method.invoke(mPackageManagerObj, args);
+                }
+            });
+            mPackageManagerField.set(null, mPackageManagerProxy);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
