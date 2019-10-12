@@ -2,9 +2,16 @@ package coder.zhang.rxjavaproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
@@ -15,17 +22,24 @@ import coder.zhang.rxjavaproject.observer_pattern.MyObservable;
 import coder.zhang.rxjavaproject.observer_pattern.MyObservableImpl;
 import coder.zhang.rxjavaproject.observer_pattern.MyObserver;
 import coder.zhang.rxjavaproject.observer_pattern.MyObserverImpl;
+import coder.zhang.rxjavaproject.retrofit_rxjava.RetrofitRxJavaActivity;
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.observables.GroupedObservable;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ScrollView scrollView = findViewById(R.id.scrollview);
+        LinearLayout linearLayout = findViewById(R.id.linearlayout);
     }
 
     public void myRxjava(View view) {
@@ -95,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void subscribe02(View view) {
-        Observable.create(new ObservableOnSubscribe<String>(){
+        Observable.create(new ObservableOnSubscribe<String>() {
 
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
@@ -135,12 +152,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private Disposable disposable;
+
     // 切断下游
     public void subscribe03(View view) {
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(ObservableEmitter<Integer> e) throws Exception {
-                for(int i = 0; i < 100; i++) {
+                for (int i = 0; i < 100; i++) {
                     e.onNext(i);
                 }
                 e.onComplete();
@@ -171,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void operator_just(View view) {
         Observable.just("A", "B", 1, 2)
-                .subscribe(new Observer<Object>(){
+                .subscribe(new Observer<Object>() {
 
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -718,5 +736,65 @@ public class MainActivity extends AppCompatActivity {
                 log("下游接收完成");
             }
         });
+    }
+
+    public void thread(View view) {
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> e) throws Exception {
+                e.onNext("A");
+                log("上游线程: " + Thread.currentThread().getName());
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        log("下游线程: " + Thread.currentThread().getName());
+                    }
+                });
+    }
+
+    private Subscription subscription;
+    public void flowable(View view) {
+        Flowable.create(new FlowableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(FlowableEmitter<Integer> e) throws Exception {
+                for (int i = 0; i < Integer.MAX_VALUE; i++) {
+                    e.onNext(i);
+                }
+            }
+        }, BackpressureStrategy.LATEST)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onSubscribe(Subscription s) {
+                        subscription = s;
+                        s.request(100);
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        SystemClock.sleep(100);
+                        log("下游接收事件: " + integer);
+//                        subscription.request(1);
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        log("下游接收报错: " + t);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    public void RetrofitRxJava(View view) {
+        startActivity(new Intent(this, RetrofitRxJavaActivity.class));
     }
 }
