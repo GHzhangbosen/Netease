@@ -61,7 +61,7 @@ public class RetrofitRxJavaActivity extends AppCompatActivity {
         // 2、注册成功，更新注册UI
         // 3、自动调用登录接口
         // 4、登录成功，更新登录UI
-        
+
         MyRetrofit.createRetrofit().create(INetworkInterface.class)
                 .regist("张三丰", "123123")
                 .subscribeOn(Schedulers.io())
