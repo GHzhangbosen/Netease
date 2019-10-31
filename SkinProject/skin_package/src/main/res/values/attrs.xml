@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="StyleLinearLayout">
+        <attr name="android:background" />
+    </declare-styleable>
+
+    <declare-styleable name="StyleTextView">
+        <attr name="android:background" />
+        <attr name="android:textColor"/>
+    </declare-styleable>
+
+    <declare-styleable name="StyleButton">
+        <attr name="android:background" />
+        <attr name="android:textColor" />
+    </declare-styleable>
+</resources>

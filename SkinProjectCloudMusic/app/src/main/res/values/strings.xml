@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SkinProjectCloudMusic</string>
+    <string name="music_local">本地音乐 (32)</string>
+    <string name="recent_play">最近播放(12)</string>
+    <string name="download_manage">下载管理(10)</string>
+    <string name="singer">我是歌手(6)</string>
+    <string name="song">光辉岁月-Beyond</string>
+</resources>

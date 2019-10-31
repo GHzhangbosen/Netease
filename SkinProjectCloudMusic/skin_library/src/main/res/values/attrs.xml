@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="StyleTextView">
+        <attr name="android:textColor" format="color" />
+        <attr name="android:background" format="color" />
+        <attr name="android:text" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="StyleButton">
+        <attr name="android:textColor" format="color" />
+        <attr name="android:background" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="StyleLinearLayout">
+        <attr name="android:background" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="StyleRelativeLayout">
+        <attr name="android:background" format="color" />
+    </declare-styleable>
+</resources>
