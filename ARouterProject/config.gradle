@@ -1,0 +1,41 @@
+ext {
+    isRelease = true
+
+    packageNameForApt = "coder.zhang.arouterproject.apt"
+
+    androidId = [
+            compileSdkVersion: 29,
+            buildToolsVersion: "29.0.1",
+            minSdkVersion    : 15,
+            targetSdkVersion : 29,
+            versionCode      : 1,
+            versionName      : "1.0"
+    ]
+
+    applicationId = [
+            appId   : "coder.zhang.arouterproject",
+            order   : "coder.zhang.order",
+            personal: "coder.zhang.personal"
+    ]
+
+    supportLibrary = "29.0.0"
+
+    dependencies = [
+            appcompat       : "androidx.appcompat:appcompat:1.1.0",
+            constraintlayout: "androidx.constraintlayout:constraintlayout:1.1.3"
+    ]
+
+    dependenciesModule = [
+            arouter: ":arouter_annotation",
+            common: ":common"
+    ]
+
+    dependenciesModuleApi = [
+            arouter: ":arouter_annotation"
+    ]
+
+    dependenciesModuleCommon = [
+            arouter: ":arouter_annotation",
+            api: ":arouter_api"
+    ]
+}

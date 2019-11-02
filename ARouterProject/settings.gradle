@@ -1,0 +1,2 @@
+include ':app', ':order', ':personal', ':arouter_annotation', ':arouter_compiler', ':arouter_api', ':common'
+rootProject.name='ARouterProject'

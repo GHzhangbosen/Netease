@@ -1,0 +1,50 @@
+if (rootProject.ext.isRelease) {
+    apply plugin: 'com.android.library'
+} else {
+    apply plugin: 'com.android.application'
+}
+
+def androidId = rootProject.ext.androidId
+def appId = rootProject.ext.applicationId
+def dependency = rootProject.ext.dependencies
+def dependencyModule = rootProject.ext.dependenciesModule
+def isRelease = rootProject.ext.isRelease
+def packageNameForApt = rootProject.ext.packageNameForApt
+
+android {
+    compileSdkVersion androidId.compileSdkVersion
+    buildToolsVersion androidId.buildToolsVersion
+
+    defaultConfig {
+        if (!isRelease) applicationId appId.personal
+        minSdkVersion androidId.minSdkVersion
+        targetSdkVersion androidId.targetSdkVersion
+        versionCode androidId.versionCode
+        versionName androidId.versionName
+
+        buildConfigField "boolean", "isRelease", String.valueOf(isRelease)
+
+        // 用于APT传参接收。必须写在defaultConfig之下
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [moduleName: project.getName(), packageNameForApt: packageNameForApt]
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    dependency.each {k, v -> implementation v}
+    dependencyModule.each {k, v -> implementation project(v)}
+    annotationProcessor project(':arouter_compiler')
+}
