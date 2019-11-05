@@ -107,6 +107,9 @@ public class ARouterManager {
                         activity.startActivity(intent, bundleManager.getBundle());
                     }
                     break;
+
+                case CALL:
+                    return routerBean.getClazz().newInstance();
             }
         } catch (Exception e) {
             e.printStackTrace();

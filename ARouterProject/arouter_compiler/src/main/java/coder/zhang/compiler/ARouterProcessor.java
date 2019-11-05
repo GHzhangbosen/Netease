@@ -121,7 +121,9 @@ public class ARouterProcessor extends AbstractProcessor {
         // 5、生成ARouter$$Group$$order类
 
         TypeElement activityType = elementUtils.getTypeElement(Constants.ACTIVITY_WHOLE_PAHT);
+        TypeElement callType = elementUtils.getTypeElement(Constants.CALL_WHOLE_PATH);
         TypeMirror activityMirror = activityType.asType();
+        TypeMirror callMirror = callType.asType();
 
         for (Element element : elements) {
             TypeMirror elementMirror = element.asType();
@@ -136,6 +138,8 @@ public class ARouterProcessor extends AbstractProcessor {
 
             if (typeUtils.isSubtype(elementMirror, activityMirror)) {
                 bean.setType(RouterBean.Type.ACTIVITY);
+            } else if (typeUtils.isSubtype(elementMirror, callMirror)) {
+                bean.setType(RouterBean.Type.CALL);
             } else {
                 throw new RuntimeException("@ARouter只能作用在ACTIVITY之上");
             }
