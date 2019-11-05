@@ -7,9 +7,17 @@ import android.os.Bundle;
 import android.view.View;
 
 import coder.zhang.arouter.ARouter;
+import coder.zhang.arouter.Parameter;
 
 @ARouter(path = "/app/MainActivity")
 public class MainActivity extends AppCompatActivity {
+
+    @Parameter
+    String name;
+    @Parameter
+    int age;
+    @Parameter
+    boolean sex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

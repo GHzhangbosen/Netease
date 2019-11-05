@@ -6,9 +6,19 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import coder.zhang.arouter.ARouter;
+import coder.zhang.arouter.Parameter;
 
 @ARouter(path = "/app/Main3Activity")
 public class Main3Activity extends AppCompatActivity {
+
+    @Parameter(name = "name")
+    String name03;
+
+    @Parameter(name = "age")
+    int age03;
+
+    @Parameter(name = "sex")
+    boolean sex03;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

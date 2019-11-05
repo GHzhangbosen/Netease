@@ -21,4 +21,13 @@ public class Constants {
 
     public static final String FILE_NAME_PREFIX_PATH = "ARouter$$Path$$";
     public static final String FILE_NAME_PREFIX_GROUP = "ARouter$$Group$$";
+
+
+    //////Parameter/////////////
+    public static final String PARAMETER_ANNOTATION_TYPES = "coder.zhang.arouter.Parameter";
+    public static final String LOADPARAMETER_WHOLE_PATH = "coder.zhang.arouter_api.LoadParameter";
+    public static final String LOADPARAMETER_PARAMETER_NAME = "target";
+    public static final String FILE_NAME_SUBFIX_LOADPARAMETER = "$$Parameter";
+    public static final String METHOD_NAME_SUBFIX_LOADPARAMETER = "loadParameter";
+    public static final String VARIABLE_NAME_SUBFIX_LOADPARAMETER = "t";
 }

@@ -7,9 +7,16 @@ import android.os.Bundle;
 import android.view.View;
 
 import coder.zhang.arouter.ARouter;
+import coder.zhang.arouter.Parameter;
 
 @ARouter(path = "/personal/Personal_MainActivity")
 public class Personal_MainActivity extends AppCompatActivity {
+
+    @Parameter(name ="name")
+    String namePersonal;
+
+    @Parameter(name = "age")
+    int agePersonal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

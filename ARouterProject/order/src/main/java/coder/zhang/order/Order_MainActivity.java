@@ -7,9 +7,16 @@ import android.os.Bundle;
 import android.view.View;
 
 import coder.zhang.arouter.ARouter;
+import coder.zhang.arouter.Parameter;
 
 @ARouter(path = "/order/Order_MainActivity")
 public class Order_MainActivity extends AppCompatActivity {
+
+    @Parameter(name = "name")
+    String nameOrder;
+
+    @Parameter(name = "age")
+    int ageOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
