@@ -4,10 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import coder.zhang.arouter.ARouter;
 import coder.zhang.arouter.Parameter;
+import coder.zhang.arouter_api.ARouterManager;
+import coder.zhang.arouter_api.ParameterManager;
 
 @ARouter(path = "/personal/Personal_MainActivity")
 public class Personal_MainActivity extends AppCompatActivity {
@@ -23,12 +26,26 @@ public class Personal_MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.personal_activity_main);
 
-        System.out.println("个人中心页面接收name: " + getIntent().getStringExtra("name"));
+        ParameterManager.getInstance().loadParameter(this);
+        Log.d("succ2", "个人中心页面接收name: " + getIntent().getStringExtra("name"));
+
+        Intent intent = new Intent();
+        intent.putExtra("call", "个人中心已经关闭");
+        setResult(0, intent);
     }
 
     public void jumpApp(View view) {
+        ARouterManager.getInstance().build("/app/MainActivity")
+                .withString("name", "from_personal")
+                .withInt("age", 1)
+                .withBoolean("sex", true)
+                .navigation(this, 163);
     }
 
     public void jumpOrder(View view) {
+        ARouterManager.getInstance().build("/order/Order_MainActivity")
+                .withString("name", "from_personal")
+                .withInt("age", 2)
+                .navigation(this, 163);
     }
 }

@@ -22,6 +22,9 @@ public class Constants {
     public static final String FILE_NAME_PREFIX_PATH = "ARouter$$Path$$";
     public static final String FILE_NAME_PREFIX_GROUP = "ARouter$$Group$$";
 
+    //////////模块回调//////////
+    public static final String CALL_WHOLE_PATH = "";
+
 
     //////Parameter/////////////
     public static final String PARAMETER_ANNOTATION_TYPES = "coder.zhang.arouter.Parameter";

@@ -5,14 +5,13 @@ import java.util.Map;
 
 import coder.zhang.arouter.bean.RouterBean;
 import coder.zhang.arouter_api.ARouterLoadPath;
-import coder.zhang.order.Order_MainActivity;
 
 public class ARouter$$Path$$order implements ARouterLoadPath {
 
     @Override
     public Map<String, RouterBean> loadPath() {
         Map<String, RouterBean> pathMap = new HashMap<>();
-        pathMap.put("/order/Order_MainActivity", RouterBean.create(RouterBean.Type.ACTIVITY, Order_MainActivity.class, "order", "/order/MainActivity"));
+//        pathMap.put("/order/Order_MainActivity", RouterBean.create(RouterBean.Type.ACTIVITY, Order_MainActivity.class, "order", "/order/MainActivity"));
         return pathMap;
     }
 }
